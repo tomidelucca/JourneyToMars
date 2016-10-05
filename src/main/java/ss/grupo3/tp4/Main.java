@@ -3,6 +3,7 @@ package ss.grupo3.tp4;
 import ss.grupo3.tp4.logger.LogType;
 import ss.grupo3.tp4.logger.Logger;
 import ss.grupo3.tp4.mars.JourneyToMars;
+import ss.grupo3.tp4.mars.SolarSystem;
 import ss.grupo3.tp4.observers.*;
 
 import java.io.File;
@@ -15,9 +16,15 @@ public class Main {
 
         Logger.setDebug(Boolean.FALSE);
 
-        generateAnimations();
-        //findCollsions();
-        //minTravelLength();
+        solarSystem();
+    }
+
+    public static void solarSystem() {
+        SolarSystem solarSystem = new SolarSystem();
+        solarSystem.addObserver(new Ovito3DWriterObserver("output/sim.xyz", 86400.0));
+
+        solarSystem.initialize();
+        solarSystem.simulate();
     }
 
     public static void minTravelLength() {
@@ -56,11 +63,10 @@ public class Main {
 
     public static void generateAnimations() {
         JourneyToMars journeyToMars = new JourneyToMars();
-        journeyToMars.setInitialSpaceshipVelocity(7.0327 * 1000.0);
+        journeyToMars.setInitialSpaceshipVelocity(3.8 * 1000.0);
         journeyToMars.setMissionMaxTime(2 * 86400.0 * 365);
-        journeyToMars.setLaunchAngle(-0.40005*Math.PI);
 
-        journeyToMars.addObserver(new OvitoWriterObserver("output/sim.xyz", 86400.0));
+        journeyToMars.addObserver(new Ovito3DWriterObserver("output/sim.xyz", 86400.0));
 
         journeyToMars.initialize();
         journeyToMars.simulate();

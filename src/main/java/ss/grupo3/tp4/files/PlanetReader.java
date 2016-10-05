@@ -14,8 +14,14 @@ public class PlanetReader {
     private double L;
 
     private Particle sun;
+    private Particle mercury;
+    private Particle venus;
     private Particle earth;
     private Particle mars;
+    private Particle jupiter;
+    private Particle saturn;
+    private Particle uranus;
+    private Particle neptune;
 
     public void initialize(String path) {
 
@@ -53,6 +59,48 @@ public class PlanetReader {
             mars.setMass(Double.valueOf(input[7]));
             mars.setId("Mars");
 
+            input = br.readLine().split(" ");
+            mercury = new Particle(new Vector(Double.valueOf(input[0]) * 1000.0, Double.valueOf(input[1]) * 1000.0, Double.valueOf(input[2]) * 1000.0));
+            mercury.setVelocity(new Vector(Double.valueOf(input[3]) * 1000.0, Double.valueOf(input[4]) * 1000.0,  Double.valueOf(input[5]) * 1000.0));
+            mercury.setRadius(Double.valueOf(input[6]) * 1000.0);
+            mercury.setMass(Double.valueOf(input[7]));
+            mercury.setId("Mercury");
+
+            input = br.readLine().split(" ");
+            venus = new Particle(new Vector(Double.valueOf(input[0]) * 1000.0, Double.valueOf(input[1]) * 1000.0, Double.valueOf(input[2]) * 1000.0));
+            venus.setVelocity(new Vector(Double.valueOf(input[3]) * 1000.0, Double.valueOf(input[4]) * 1000.0,  Double.valueOf(input[5]) * 1000.0));
+            venus.setRadius(Double.valueOf(input[6]) * 1000.0);
+            venus.setMass(Double.valueOf(input[7]));
+            venus.setId("Venus");
+
+            input = br.readLine().split(" ");
+            jupiter = new Particle(new Vector(Double.valueOf(input[0]) * 1000.0, Double.valueOf(input[1]) * 1000.0, Double.valueOf(input[2]) * 1000.0));
+            jupiter.setVelocity(new Vector(Double.valueOf(input[3]) * 1000.0, Double.valueOf(input[4]) * 1000.0,  Double.valueOf(input[5]) * 1000.0));
+            jupiter.setRadius(Double.valueOf(input[6]) * 1000.0);
+            jupiter.setMass(Double.valueOf(input[7]));
+            jupiter.setId("Jupiter");
+
+            input = br.readLine().split(" ");
+            saturn = new Particle(new Vector(Double.valueOf(input[0]) * 1000.0, Double.valueOf(input[1]) * 1000.0, Double.valueOf(input[2]) * 1000.0));
+            saturn.setVelocity(new Vector(Double.valueOf(input[3]) * 1000.0, Double.valueOf(input[4]) * 1000.0,  Double.valueOf(input[5]) * 1000.0));
+            saturn.setRadius(Double.valueOf(input[6]) * 1000.0);
+            saturn.setMass(Double.valueOf(input[7]));
+            saturn.setId("Saturn");
+
+            input = br.readLine().split(" ");
+            uranus = new Particle(new Vector(Double.valueOf(input[0]) * 1000.0, Double.valueOf(input[1]) * 1000.0, Double.valueOf(input[2]) * 1000.0));
+            uranus.setVelocity(new Vector(Double.valueOf(input[3]) * 1000.0, Double.valueOf(input[4]) * 1000.0,  Double.valueOf(input[5]) * 1000.0));
+            uranus.setRadius(Double.valueOf(input[6]) * 1000.0);
+            uranus.setMass(Double.valueOf(input[7]));
+            uranus.setId("Uranus");
+
+            input = br.readLine().split(" ");
+            neptune = new Particle(new Vector(Double.valueOf(input[0]) * 1000.0, Double.valueOf(input[1]) * 1000.0, Double.valueOf(input[2]) * 1000.0));
+            neptune.setVelocity(new Vector(Double.valueOf(input[3]) * 1000.0, Double.valueOf(input[4]) * 1000.0,  Double.valueOf(input[5]) * 1000.0));
+            neptune.setRadius(Double.valueOf(input[6]) * 1000.0);
+            neptune.setMass(Double.valueOf(input[7]));
+            neptune.setId("Neptune");
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -65,6 +113,14 @@ public class PlanetReader {
         }
     }
 
+    public Particle getVenus() {
+        return venus;
+    }
+
+    public Particle getMercury() {
+        return mercury;
+    }
+
     public Particle getSun() {
         return this.sun.clone();
     }
@@ -75,5 +131,21 @@ public class PlanetReader {
 
     public Particle getMars() {
         return this.mars.clone();
+    }
+
+    public Particle getJupiter() {
+        return jupiter;
+    }
+
+    public Particle getSaturn() {
+        return saturn;
+    }
+
+    public Particle getUranus() {
+        return uranus;
+    }
+
+    public Particle getNeptune() {
+        return neptune;
     }
 }

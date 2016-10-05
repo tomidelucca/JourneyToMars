@@ -26,7 +26,7 @@ public class LeapFrogAlgorithm implements TimeStepMolecularAlgorithm {
 
         p.getPosition().setX(oldPosition.getX() + dt*p.getVelocity().getX());
         p.getPosition().setY(oldPosition.getY() + dt*p.getVelocity().getY());
-
+        p.getPosition().setZ(oldPosition.getZ() + dt*p.getVelocity().getZ());
     }
 
     public static Vector sumForces(Particle p, Collection<Particle> bodies) {
@@ -44,7 +44,7 @@ public class LeapFrogAlgorithm implements TimeStepMolecularAlgorithm {
             }
         }
 
-        return new Vector(forcesX, forcesY);
+        return new Vector(forcesX, forcesY, forcesZ);
     }
 
     private static Vector gravitationalForce(Particle p1, Particle p2) {
@@ -54,10 +54,12 @@ public class LeapFrogAlgorithm implements TimeStepMolecularAlgorithm {
         Double rij = Math.sqrt(Math.pow(p2.getPosition().getX() - p1.getPosition().getX(), 2) + Math.pow(p2.getPosition().getY() - p1.getPosition().getY(), 2));
         Double ei = (p2.getPosition().getX() - p1.getPosition().getX())/rij;
         Double ej = (p2.getPosition().getY() - p1.getPosition().getY())/rij;
+        Double ez = (p2.getPosition().getZ() - p1.getPosition().getZ())/rij;
 
         Double Fi = G*((p1.getMass()*p2.getMass())/Math.pow(rij, 2))*ei;
         Double Fj = G*((p1.getMass()*p2.getMass())/Math.pow(rij, 2))*ej;
+        Double Fz = G*((p1.getMass()*p2.getMass())/Math.pow(rij, 2))*ez;
 
-        return new Vector(Fi, Fj, 0.0);
+        return new Vector(Fi, Fj, Fz);
     }
 }

@@ -45,7 +45,7 @@ public class JourneyToMars extends Simulation {
 
     public void initialize() {
         planetReader = new PlanetReader();
-        planetReader.initialize("input/input.xyz");
+        planetReader.initialize("input/input2.xyz");
 
         bodies.put(Bodies.EARTH, planetReader.getEarth());
         bodies.put(Bodies.MARS, planetReader.getMars());
