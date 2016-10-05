@@ -24,20 +24,23 @@ public class Main {
         JourneyToMars journeyToMars = new JourneyToMars();
         journeyToMars.initialize();
 
-        MinTravelDistanceObserver cW = new MinTravelDistanceObserver("output/min5.csv");
+        MinTravelAngleObserver cW = new MinTravelAngleObserver("output/min7.csv");
         journeyToMars.addObserver(cW);
 
-        Double maxStartTime = 2500.0 * 86400.0;
-        Double startTime = 1800.0 * 86400.0;
-        Double timeStep = 30 * 86400.0;
+        journeyToMars.setTimeFromMissionStartToLaunch(0.0);
+        journeyToMars.setMissionMaxTime(2 * 365 * 86400.0);
 
-        while (startTime <= maxStartTime) {
-            journeyToMars.setTimeFromMissionStartToLaunch(startTime);
-            journeyToMars.setMissionMaxTime(0.5 * 365 * 86400.0 + startTime);
-            Logger.log("Current Date: " + startTime/86400, LogType.INFO);
-            Double maxVelocity = 9.0 * 1000;
-            Double velocity = 3.0 * 1000;
-            Double velocityStep = 0.15 * 1000;
+        Double maxStartAngle = 0.3*Math.PI;
+        Double startAngle = -0.3*Math.PI;
+        Double angleStep = Math.PI/20;
+
+        while (startAngle <= maxStartAngle) {
+
+            Logger.log("Current Angle: " + startAngle, LogType.INFO);
+            Double maxVelocity = 8.0 * 1000;
+            Double velocity = 4.0 * 1000;
+            Double velocityStep = 0.10 * 1000;
+            journeyToMars.setLaunchAngle(startAngle);
             while (velocity <= maxVelocity) {
                 journeyToMars.reset();
                 journeyToMars.setInitialSpaceshipVelocity(velocity);
@@ -45,7 +48,7 @@ public class Main {
                 velocity += velocityStep;
             }
 
-            startTime += timeStep;
+            startAngle += angleStep;
         }
 
         cW.finish();
@@ -53,9 +56,9 @@ public class Main {
 
     public static void generateAnimations() {
         JourneyToMars journeyToMars = new JourneyToMars();
-        journeyToMars.setInitialSpaceshipVelocity(5.0 * 1000.0);
-        journeyToMars.setTimeFromMissionStartToLaunch(1.0 * 86400.0);
-        journeyToMars.setMissionMaxTime(5 * 86400.0 * 365);
+        journeyToMars.setInitialSpaceshipVelocity(7.0327 * 1000.0);
+        journeyToMars.setMissionMaxTime(2 * 86400.0 * 365);
+        journeyToMars.setLaunchAngle(-0.40005*Math.PI);
 
         journeyToMars.addObserver(new OvitoWriterObserver("output/sim.xyz", 86400.0));
 
@@ -66,16 +69,16 @@ public class Main {
     public static void findCollsions() {
         JourneyToMars journeyToMars = new JourneyToMars();
         journeyToMars.initialize();
-        Double missionStartDate = 0.0 * 86400.0;
-        journeyToMars.setTimeFromMissionStartToLaunch(missionStartDate);
-        journeyToMars.setMissionMaxTime(5 * 365 * 86400.0 + missionStartDate);
+        journeyToMars.setMissionMaxTime(2 * 365 * 86400.0);
 
-        CollisionDetectorObserver cW = new CollisionDetectorObserver(1E8, 150.0);
+        CollisionDetectorObserver cW = new CollisionDetectorObserver(2E7, 200.0);
         journeyToMars.addObserver(cW);
 
-        Double maxVelocity = 3.8 * 1000;
-        Double velocity = 3.7 * 1000;
-        Double velocityStep = 0.01 * 1000;
+        Double maxVelocity = 7.033 * 1000;
+        Double velocity = 7.032 * 1000;
+        Double velocityStep = 0.0001 * 1000;
+
+        journeyToMars.setLaunchAngle(-0.40005* Math.PI);
 
         while (velocity <= maxVelocity) {
             if(velocity%1000 == 0) {
