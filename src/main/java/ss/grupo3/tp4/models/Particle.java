@@ -1,6 +1,6 @@
 package ss.grupo3.tp4.models;
 
-public class Particle {
+public class Particle implements Cloneable {
 
     private Vector position;
     private Vector velocity;
@@ -54,6 +54,15 @@ public class Particle {
 
     public Double distanceToParticle(Particle otherParticle) {
         return getPosition().distanceToVector(otherParticle.getPosition()) - getRadius() - otherParticle.getRadius();
+    }
+
+    public Particle clone() {
+        Particle cloned = new Particle(position.clone());
+        cloned.setVelocity(velocity.clone());
+        cloned.setRadius(radius);
+        cloned.setMass(mass);
+        cloned.setId(id);
+        return cloned;
     }
 
     @Override

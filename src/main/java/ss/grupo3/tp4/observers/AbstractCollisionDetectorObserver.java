@@ -1,26 +1,22 @@
 package ss.grupo3.tp4.observers;
 
-import ss.grupo3.tp4.logger.LogType;
-import ss.grupo3.tp4.logger.Logger;
 import ss.grupo3.tp4.mars.JourneyToMars;
 import ss.grupo3.tp4.models.Particle;
 import ss.grupo3.tp4.simulation.Simulation;
 import ss.grupo3.tp4.simulation.SimulationObserver;
 
-public class CollisionDetectorObserver implements SimulationObserver{
+public abstract class AbstractCollisionDetectorObserver implements SimulationObserver {
 
     private Double DT;
     private Double epsilon;
-    private Double lastObservingTime = null;
+    protected Double lastObservingTime = null;
 
-    public CollisionDetectorObserver(final Double epsilon, final Double DT) {
-        this.DT = DT;
+    public AbstractCollisionDetectorObserver(final Double epsilon, final Double DT) {
         this.epsilon = epsilon;
+        this.DT = DT;
     }
 
-    @Override
-    public void notify(Simulation simulation) {
-        JourneyToMars journeyToMars = (JourneyToMars) simulation;
+    protected Boolean detectCollision(JourneyToMars journeyToMars) {
 
         if(lastObservingTime == null) lastObservingTime = journeyToMars.getCurrentMissionTime();
 
@@ -30,18 +26,18 @@ public class CollisionDetectorObserver implements SimulationObserver{
             Double distance = spaceship.distanceToParticle(mars);
 
             if(distance <= epsilon) {
-                Logger.log("COLLSION! Day: " + (lastObservingTime/86400) + ", Distance: " + distance + ", Initial Velocity: " + journeyToMars.getInitialSpaceshipVelocity() + ", Velocity: " + spaceship.getVelocity() + ", Trip Time: " + (journeyToMars.getCurrentMissionTime() - journeyToMars.getTimeFromMissionStartToLaunch())/86400 , LogType.SUCCESS);
+                return Boolean.TRUE;
             }
-
-            Logger.log("Day: " + (int)(lastObservingTime/86400) + ", Distance: " + distance, LogType.DEBUG);
 
             lastObservingTime = lastObservingTime + DT;
         }
 
+        return Boolean.FALSE;
     }
 
     @Override
     public void simulationDidFinish(Simulation simulation) {
         lastObservingTime = null;
     }
+
 }

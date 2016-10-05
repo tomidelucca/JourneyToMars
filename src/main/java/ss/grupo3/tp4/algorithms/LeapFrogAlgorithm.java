@@ -15,6 +15,7 @@ public class LeapFrogAlgorithm implements TimeStepMolecularAlgorithm {
 
         p.getVelocity().setX(oldVelocity.getX() + (dt/p.getMass())*forces.getX());
         p.getVelocity().setY(oldVelocity.getY() + (dt/p.getMass())*forces.getY());
+        p.getVelocity().setZ(oldVelocity.getZ() + (dt/p.getMass())*forces.getZ());
 
     }
 
@@ -32,12 +33,14 @@ public class LeapFrogAlgorithm implements TimeStepMolecularAlgorithm {
 
         Double forcesX = 0.0;
         Double forcesY = 0.0;
+        Double forcesZ = 0.0;
 
         for(Particle otherParticle: bodies) {
             if(!otherParticle.equals(p)) {
                 Vector force = gravitationalForce(p, otherParticle);
                 forcesX += force.getX();
                 forcesY += force.getY();
+                forcesZ += force.getZ();
             }
         }
 
@@ -55,6 +58,6 @@ public class LeapFrogAlgorithm implements TimeStepMolecularAlgorithm {
         Double Fi = G*((p1.getMass()*p2.getMass())/Math.pow(rij, 2))*ei;
         Double Fj = G*((p1.getMass()*p2.getMass())/Math.pow(rij, 2))*ej;
 
-        return new Vector(Fi, Fj);
+        return new Vector(Fi, Fj, 0.0);
     }
 }

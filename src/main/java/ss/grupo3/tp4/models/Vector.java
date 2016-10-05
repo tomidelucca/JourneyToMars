@@ -1,6 +1,6 @@
 package ss.grupo3.tp4.models;
 
-public class Vector {
+public class Vector implements Cloneable {
 
     private Double x;
     private Double y;
@@ -44,6 +44,10 @@ public class Vector {
         return Math.sqrt(Math.pow(getX()-otherVector.getX(), 2) +
                 Math.pow(getY()-otherVector.getY(), 2) +
                 Math.pow(getZ()-otherVector.getZ(), 2));
+    }
+
+    public Vector clone() {
+        return new Vector(x, y, z);
     }
 
     @Override

@@ -24,6 +24,10 @@ public class JourneyToMars extends Simulation {
     public static final Double DAY = 24 * HOUR;
     public static final Double YEAR = 365 * DAY;
 
+    private Boolean stop = Boolean.FALSE;
+
+    private PlanetReader planetReader = null;
+
     private Double initialSpaceshipVelocity = 3.0 * 1000;
     private Double currentMissionTime = 0.0;
     private Double launchAngle = 0.0;
@@ -40,7 +44,7 @@ public class JourneyToMars extends Simulation {
     }
 
     public void initialize() {
-        PlanetReader planetReader = new PlanetReader();
+        planetReader = new PlanetReader();
         planetReader.initialize("input/input.xyz");
 
         bodies.put(Bodies.EARTH, planetReader.getEarth());
@@ -49,6 +53,8 @@ public class JourneyToMars extends Simulation {
     }
 
     public Boolean simulate() {
+
+        Boolean b = Boolean.TRUE;
 
         while (currentMissionTime <= timeFromMissionStartToLaunch) {
             algorithm.updateVelocities(bodies.get(Bodies.EARTH), bodies.values(), DT);
@@ -60,14 +66,14 @@ public class JourneyToMars extends Simulation {
             currentMissionTime += DT;
         }
 
-        Double angleToSun = angleToSun(bodies.get(Bodies.EARTH));
-        launchAngle += angleToSun;
+        Double angleToSun = Math.atan2(bodies.get(Bodies.EARTH).getPosition().getY(), bodies.get(Bodies.EARTH).getPosition().getX());
+        Double totalAngle = launchAngle + angleToSun;
 
         Double sPosX = bodies.get(Bodies.EARTH).getPosition().getX() + bodies.get(Bodies.EARTH).getRadius()*Math.cos(angleToSun) + SPACESHIP_INITIAL_DISTANCE*Math.cos(angleToSun);
         Double sPosY = bodies.get(Bodies.EARTH).getPosition().getY() + bodies.get(Bodies.EARTH).getRadius()*Math.sin(angleToSun) + SPACESHIP_INITIAL_DISTANCE*Math.sin(angleToSun);
 
-        Double sVelX = initialSpaceshipVelocity*Math.cos(Math.PI/2+launchAngle) + SPACESHIP_ORBITAL_SPEED*Math.cos(Math.PI/2+angleToSun) + bodies.get(Bodies.EARTH).getVelocity().getX();
-        Double sVelY = initialSpaceshipVelocity*Math.sin(Math.PI/2+launchAngle) + SPACESHIP_ORBITAL_SPEED*Math.sin(Math.PI/2+angleToSun) + bodies.get(Bodies.EARTH).getVelocity().getY();
+        Double sVelX = initialSpaceshipVelocity*Math.cos(Math.PI/2+totalAngle) + SPACESHIP_ORBITAL_SPEED*Math.cos(Math.PI/2+angleToSun) + bodies.get(Bodies.EARTH).getVelocity().getX();
+        Double sVelY = initialSpaceshipVelocity*Math.sin(Math.PI/2+totalAngle) + SPACESHIP_ORBITAL_SPEED*Math.sin(Math.PI/2+angleToSun) + bodies.get(Bodies.EARTH).getVelocity().getY();
 
         Vector sPos = new Vector(sPosX, sPosY);
         Vector sVel = new Vector(sVelX, sVelY);
@@ -88,23 +94,29 @@ public class JourneyToMars extends Simulation {
 
             updateObservers();
             currentMissionTime += DT;
+
+            if(stop)
+                break;
         }
 
         finishSimulation();
         return Boolean.TRUE;
     }
 
+    public void stop() {
+        stop = Boolean.TRUE;
+    }
+
     public void reset() {
-        initialize();
+        bodies.put(Bodies.EARTH, planetReader.getEarth());
+        bodies.put(Bodies.MARS, planetReader.getMars());
+        bodies.put(Bodies.SUN, planetReader.getSun());
+        stop = Boolean.FALSE;
         currentMissionTime = 0.0;
     }
 
     public Double daysFromMissionStart() {
         return currentMissionTime / DAY;
-    }
-
-    private double angleToSun(Particle body) {
-        return Math.atan2(body.getPosition().getY(), body.getPosition().getX());
     }
 
     public Double getInitialSpaceshipVelocity() {

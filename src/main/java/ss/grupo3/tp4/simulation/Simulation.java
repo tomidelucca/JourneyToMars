@@ -27,6 +27,7 @@ public abstract class Simulation {
     }
 
     public abstract Boolean simulate();
+    public abstract void stop();
     public abstract void reset();
     public abstract void initialize();
 
